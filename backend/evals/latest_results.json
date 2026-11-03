@@ -1,0 +1,25 @@
+{
+  "evaluation": "synthetic_retrieval_ranking",
+  "evaluated_at_utc": "2026-11-03T00:08:44+00:00",
+  "corpus_chunks": 12,
+  "queries": 12,
+  "runs_per_query": 250,
+  "metrics": {
+    "top_1_hits": "10/12",
+    "top_1_accuracy": 0.8333,
+    "recall_at_3_hits": "11/12",
+    "recall_at_3": 0.9167,
+    "mean_reciprocal_rank": 0.875,
+    "queries_with_ranked_results": "12/12",
+    "ranking_latency_ms": {
+      "p50": 0.0934,
+      "p95": 0.0985,
+      "mean": 0.0945
+    }
+  },
+  "limitations": [
+    "Queries and documents are hand-authored synthetic fixtures, not user data.",
+    "Ranking latency is an in-process microbenchmark on a 12-chunk corpus, not API or production latency.",
+    "Ranking metrics do not measure answer factuality or citation correctness."
+  ]
+}

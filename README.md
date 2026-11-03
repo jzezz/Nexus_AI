@@ -32,7 +32,7 @@ Latest local verification: **November 3, 2026**.
 
 | Check | Result |
 | --- | ---: |
-| Backend unit and API integration tests | **13 / 13 passed** (1.31 s) |
+| Backend unit and API integration tests | **13 / 13 passed** (1.12 s) |
 | API flow tests | **5 passed** |
 | Ingestion and retrieval tests | **5 passed** |
 | PDF, DOCX, and CSV parser tests | **3 passed** |
@@ -43,6 +43,20 @@ Latest local verification: **November 3, 2026**.
 | Browser workflow smoke check | **Passed** — register, upload CSV, inspect insights, retrieve a cited answer, and view saved history |
 
 The browser smoke check connected the Next.js frontend to the local FastAPI backend. The response used the retrieval route and displayed its citation, score, and confidence; the conversation also appeared in history.
+
+### Retrieval evaluation
+
+The in-process ranking evaluation uses 12 hand-authored questions against 12 synthetic document chunks, with 250 ranking runs per question.
+
+| Metric | Result |
+| --- | ---: |
+| Top-1 expected-chunk accuracy | **10 / 12 (83.3%)** |
+| Recall@3 | **11 / 12 (91.7%)** |
+| Mean reciprocal rank | **0.875** |
+| Queries returning at least one ranked result | **12 / 12** |
+| Ranking time on this machine | **0.0934 ms p50 / 0.0985 ms p95** |
+
+Run it from the `backend` directory with `python evals/evaluate_retrieval.py`; it prints the metrics and writes the latest snapshot to [`backend/evals/latest_results.json`](backend/evals/latest_results.json). These are prototype benchmark results, not production accuracy or API latency: the corpus and questions are synthetic, the corpus has only 12 chunks, and the ranking test does not assess answer factuality or citation correctness. The eval runs in GitHub Actions alongside the backend tests.
 
 ### Run the checks
 
@@ -73,6 +87,13 @@ Pop-Location
 - **Authentication:** JWT bearer tokens and hashed passwords
 - **Document processing:** PDF, DOCX, and CSV text extraction
 - **CI:** GitHub Actions for backend tests, frontend type checking/build, and dependency audit
+
+## Resume-ready highlights
+
+- Built a full-stack document Q&A MVP with a Next.js/TypeScript frontend and FastAPI backend, exposing 10 application API operations plus health and readiness checks.
+- Implemented authenticated ingestion and retrieval for PDF, DOCX, and CSV, including chunk inspection, document insights, citations, scoped search, and persistent conversation history.
+- Added per-user document and conversation isolation, then verified core auth, upload, retrieval, citation, history, and deletion flows with 13 passing backend tests and a browser smoke check.
+- Set up GitHub Actions to run backend tests and migrations, frontend type checking and production builds, and the npm dependency audit on pushes and pull requests.
 
 ## Run locally
 
